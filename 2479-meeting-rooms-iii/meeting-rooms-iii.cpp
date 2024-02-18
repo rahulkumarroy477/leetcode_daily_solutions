@@ -3,7 +3,8 @@ public:
     typedef pair<long long,int> P;
     
     int mostBooked(int n, vector<vector<int>>& meetings) {
-        
+        ios_base::sync_with_stdio(false);
+        cin.tie(nullptr);
         sort(begin(meetings),end(meetings));
         
 //         vector<long long> lastEndingTime(n,0);
