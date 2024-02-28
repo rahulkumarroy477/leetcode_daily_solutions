@@ -11,32 +11,26 @@
  */
 class Solution {
 public:
-    void solve(TreeNode* root,int height,vector<pair<int,int>> &heightWithNode){
-        if(root->left==nullptr and root->right==nullptr){
-            heightWithNode.push_back({root->val,height});
-            return;
-        }
-        
-        if(root->left)  solve(root->left,height+1,heightWithNode);
-        if(root->right) solve(root->right,height+1,heightWithNode);
-    }
     int findBottomLeftValue(TreeNode* root) {
         
-        if(root->left == nullptr and root->right == nullptr)    return root->val;
+        // if(root->left == nullptr and root->right == nullptr)    return root->val;
         
-        // jitte bhi leaf node hai usko height ke sath store karlo
-        vector<pair<int,int>> heightWithNode;
-        solve(root,0,heightWithNode);
+        // level order traversal lagao
         
-        int h = 0, ans = 0;
-        for(auto x:heightWithNode){
-            int val = x.first;
-            int height = x.second;
-            if(height>h){
-                h = height;
-                ans = val;
+        queue<TreeNode*> q;
+        q.push(root);
+        int ans = root->val;
+        while(!q.empty()){
+            int size = q.size();
+            ans = q.front()->val;
+            for(int i = 0;i<size;i++){
+                TreeNode* node = q.front();
+                q.pop();
+                if(node->left)  q.push(node->left);
+                if(node->right) q.push(node->right);
             }
         }
+        
         return ans;
     }
 };
