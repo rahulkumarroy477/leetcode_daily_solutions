@@ -1,19 +1,20 @@
 class Solution {
 public:
     int missingNumber(vector<int>& nums) {
-        int sum = 0;
+//         using summation
         int n = nums.size();
-        int maxi = -1;
-        bool zero = false;
-        for(auto x:nums){
-            if(x==0)    zero = true;
-            maxi = max(maxi,x);
-            sum += x;
+        // long long sum = n*(n+1)/2;
+        // for(int i = 0;i<nums.size();i++){
+        //     sum-=nums[i];
+        // }
+        // return sum;
+        
+//         xor method
+        int ans = n;
+        for(int i = 0;i<n;i++){
+            ans = ans^i;
+            ans = ans^nums[i];
         }
-        
-        int missing = (maxi*(maxi+1))/2 - sum;
-        
-        if(missing) return missing;
-        return zero?maxi+1:0;
+        return ans;
     }
 };
