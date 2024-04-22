@@ -5,29 +5,35 @@ public:
         
         unordered_set<string> st(wordList.begin(),wordList.end());
         
-        queue<pair<string,int>> q;
-        q.push({beginWord,1});
+        queue<string> q;
+        q.push(beginWord);
         st.erase(beginWord);
-        while(!q.empty()){
-            string word = q.front().first;
-            int dist = q.front().second;
-            
-            q.pop();
-            
-            if(word==endWord){
-                return dist;
-            }
-            for(int i = 0;i<word.length();i++){
-                char original = word[i];
-                for(char ch = 'a';ch<='z';ch++){
-                    word[i] = ch;
-                    if(st.find(word)!=st.end()){
-                        st.erase(word);
-                        q.push({word,dist+1});
+        
+        int level = 0;
+        while(!q.empty())
+        {
+            int n = q.size();
+            while(n--)
+            {
+                string word = q.front();
+                q.pop();
+                if(word==endWord)
+                    return level+1;
+                for(int i = 0;i<word.length();i++){
+                    char original = word[i];
+                    for(char ch = 'a';ch<='z';ch++){
+                        word[i] = ch;
+                        if(st.find(word)!=st.end()){
+                            st.erase(word);
+                            q.push(word);
+                        }
                     }
+                    word[i] = original;
                 }
-                word[i] = original;
             }
+            level++;
+            
+            
         }
         
         return 0;
