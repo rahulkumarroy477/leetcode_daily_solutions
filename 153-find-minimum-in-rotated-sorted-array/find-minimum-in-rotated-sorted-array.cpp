@@ -9,6 +9,12 @@ public:
             
             int mid = low + (high-low)/2;
             
+            // array already sorted
+            if(nums[low]<=nums[high]){
+                ans = min(ans, nums[low]);
+                break;
+            }
+            
             if(nums[low]<=nums[mid]){   // equal for single and two elements
                 ans = min(ans,nums[low]);
                 low = mid + 1;
