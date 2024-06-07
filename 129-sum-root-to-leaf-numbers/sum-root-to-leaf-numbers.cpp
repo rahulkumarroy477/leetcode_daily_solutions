@@ -11,11 +11,11 @@
  */
 class Solution {
 public:
-    void solve(TreeNode* root,vector<int> &paths,int &num){
+    void solve(TreeNode* root,int &num,int &ans){
         if(root->left==nullptr and root->right == nullptr){
             num *=10;
             num += root->val;
-            paths.push_back(num);
+            ans += num;
             num -= root->val;
             num /= 10;
             return;
@@ -24,9 +24,9 @@ public:
         num *=10;
         num += root->val;
         if(root->left)
-            solve(root->left,paths,num);
+            solve(root->left,num,ans);
         if(root->right)
-            solve(root->right,paths,num);
+            solve(root->right,num,ans);
         
         num -= root->val;
         num /= 10;
@@ -34,16 +34,11 @@ public:
     }
     int sumNumbers(TreeNode* root) {
         if(root == nullptr) return 0;
-        
-        vector<int> paths;
-        int num = 0;
-        solve(root,paths,num);
-        
-        
         int ans = 0;
-        for(const auto &x:paths){
-            ans += x;
-        }
+        int num = 0;
+        solve(root,num,ans);
+        
+        
         
         return ans;
     }
