@@ -11,35 +11,40 @@
  */
 class Solution {
 public:
-    vector<vector<int>> ans;
-    vector<int> temp;
-    void trav(TreeNode* root)
-    {
-        if(root==NULL)  return;
-        temp.push_back(root->val);
-        if(root->left==NULL&&root->right==NULL)
-        {
-            ans.push_back(temp);
-            temp.pop_back();
+    void solve(TreeNode* root,vector<int> &paths,int &num){
+        if(root->left==nullptr and root->right == nullptr){
+            num *=10;
+            num += root->val;
+            paths.push_back(num);
+            num -= root->val;
+            num /= 10;
             return;
         }
-        trav(root->left);
-        trav(root->right);
-        temp.pop_back();
+        
+        num *=10;
+        num += root->val;
+        if(root->left)
+            solve(root->left,paths,num);
+        if(root->right)
+            solve(root->right,paths,num);
+        
+        num -= root->val;
+        num /= 10;
+        
     }
     int sumNumbers(TreeNode* root) {
-        if(root==NULL) return 0;
-        trav(root);
-        int sum = 0;
-        for(int i =0;i<ans.size();i++)
-        {
-            int tempSum =0;
-            for(int j= 0;j<ans[i].size();j++)
-            {
-                tempSum = tempSum*10+ans[i][j]; 
-            }
-            sum= sum + tempSum;
+        if(root == nullptr) return 0;
+        
+        vector<int> paths;
+        int num = 0;
+        solve(root,paths,num);
+        
+        
+        int ans = 0;
+        for(const auto &x:paths){
+            ans += x;
         }
-        return sum;
+        
+        return ans;
     }
 };
