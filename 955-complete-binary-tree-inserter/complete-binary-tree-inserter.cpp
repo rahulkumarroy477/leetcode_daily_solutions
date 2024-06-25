@@ -11,40 +11,33 @@
  */
 class CBTInserter {
 public:
-    TreeNode* parent;
-    queue<TreeNode*> q;
+    vector<TreeNode*> tree;
     CBTInserter(TreeNode* root) {
-        
-        this->parent = root;
-        if(root!=nullptr){
-            q.push(root);
-            while(!q.empty()){
-                TreeNode* node = q.front();
-                
-                if(node->left != nullptr)   q.push(node->left);
-                if(node->right != nullptr)  q.push(node->right);
-                // whether current node has both nodes then don't update the next insertion point
-                if (!(node->left && node->right)) break;
-                q.pop();
-            }
+        tree.push_back(root);
+        for(int i = 0;i<tree.size();i++){
+            if(tree[i]->left)   tree.push_back(tree[i]->left);
+            if(tree[i]->right)  tree.push_back(tree[i]->right);
         }
+
+
     }
     
     int insert(int val) {
+        int n = tree.size(); 
         TreeNode* newNode = new TreeNode(val);
-        TreeNode* node = q.front();
-        if(!node->left) node->left = newNode;
-        else{
-            node->right = newNode;
-            q.pop();
-        }
+        tree.push_back(newNode);
 
-        q.push(newNode);
-        return node->val;
+        
+        if(n%2){
+            tree[(n-1)/2]->left = newNode;
+        }
+        else tree[(n-1)/2]->right = newNode;
+
+        return tree[(n-1)/2]->val;
     }
     
     TreeNode* get_root() {
-        return parent;
+        return tree[0];
     }
 };
 
