@@ -15,18 +15,6 @@ public:
         char ch = board[i][j];
         board[i][j] = '$';
         
-        // traverse in all directions
-        
-//         vector<int> cols = {-1,0,1,0};
-//         vector<int> rows = {0,1,0,-1};
-        
-//         for(int k = 0;k<4;k++){
-//             int new_i = i + rows[k];
-//             int new_j = j + cols[k];
-            
-//             if(find(new_i,new_j, curr+1,board,word)==true)  
-//                 return true;
-//         }
         for(auto &dir:directions){
             int new_i = i + dir[0];
             int new_j = j + dir[1];
