@@ -37,7 +37,7 @@ public:
             temp = temp->next;
         }
         maxDistance = right - left;
-        if(left == -1 || left == curr)  return {-1,-1};
+        if(left == curr)  return {-1,-1};
         return {minDistance,maxDistance};
     }
 };
