@@ -1,24 +1,16 @@
 class Solution {
 public:
     int minOperations(vector<string>& logs) {
-        stack<string> st;
+        int count = 0;
+        for(string &log : logs){
+            if(log == "../"){
+                if(count == 0)  continue;
+                count -= 1;
+            }
+            else if(log == "./")  continue;
+            else count++;
+        }
 
-        for(string log:logs){
-            if(!st.empty() and log == "../"){
-                st.pop();
-            }
-            else if(log == "./")    continue;
-            else {
-                if(log == "../")    continue;
-                log.pop_back();
-                st.push(log);
-            }
-        }
-        int count = st.size();
-        while(!st.empty()){
-            cout<<st.top()<<endl;
-            st.pop();
-        }
         return count;
     }
 };
