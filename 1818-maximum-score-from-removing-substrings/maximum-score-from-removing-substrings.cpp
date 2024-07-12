@@ -1,51 +1,33 @@
 class Solution {
-    int secondItr(bool check,int x,int y,vector<char> &temp){
-        int points = 0;
+private:
+    int removeSubstr(string &s,char start,char end,int point){
+        int score = 0;
         vector<char> st;
-        for(char ch:temp){
-            if(!st.empty()){
-                if(check && ch == 'a' && st.back()=='b')
-                {
-                    points += y;
-                    st.pop_back();
-                }
-                else if(!check && ch == 'b' && st.back() == 'a'){
-                    points += x;
-                    st.pop_back();
-                }
-                else st.push_back(ch);
+        for(char ch:s){
+            if(!st.empty() && ch==end && st.back()==start)
+            {
+               score += point; 
+               st.pop_back();
             }
-
-            else st.push_back(ch);
-
+            else
+                st.push_back(ch);
         }
-        return points;
-
+        s = string(st.begin(),st.end());
+        return score;
     }
 public:
     int maximumGain(string s, int x, int y) {
-        bool check = x>y;
+        int totalPoints = 0;
 
-        int points = 0;
-        vector<char> st;
-        for(char ch:s){
-            if(!st.empty()){
-                if(check && ch == 'b' && st.back()=='a')
-                {
-                    points += x;
-                    st.pop_back();
-                }
-                else if(!check && ch == 'a' && st.back() == 'b'){
-                    points += y;
-                    st.pop_back();
-                }
-                else st.push_back(ch);
-            }
-
-            else st.push_back(ch);
-
+        if(x>y){
+            totalPoints += removeSubstr(s,'a','b',x);
+            totalPoints += removeSubstr(s,'b','a',y);
         }
-        points += secondItr(check,x,y,st);
-        return points;
+        else{
+            totalPoints += removeSubstr(s,'b','a',y);
+            totalPoints += removeSubstr(s,'a','b',x);
+        }
+
+        return totalPoints;
     }
 };
