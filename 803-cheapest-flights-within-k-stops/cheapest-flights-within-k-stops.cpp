@@ -20,12 +20,12 @@ public:
             
             q.pop();
             
-            if(stops>K) break;   // dont stop
+            if(stops>K) break;   // break
             for(auto iter:adj[node]){
                 int adjNode = iter.first;
                 int edge = iter.second;
                 
-                if(cost + edge < dist[adjNode] and stops <= K){
+                if(cost + edge < dist[adjNode]){
                     dist[adjNode] = cost + edge;
                     q.push({stops+1,{adjNode,cost+edge}});
                 }
