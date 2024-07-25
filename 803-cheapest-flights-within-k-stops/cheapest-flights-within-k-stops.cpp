@@ -20,7 +20,7 @@ public:
             
             q.pop();
             
-            if(stops>K) continue;   // dont stop
+            if(stops>K) break;   // dont stop
             for(auto iter:adj[node]){
                 int adjNode = iter.first;
                 int edge = iter.second;
