@@ -13,19 +13,21 @@ class Solution {
     // }
 public:
     int rob(vector<int>& nums) {
-        // n = nums.size();
-        // memset(t,-1,sizeof(t));
-        // return solve(0,nums);
         int n = nums.size();
-        vector<int> dp(n+1,0);
-        dp[1] = nums[0]; // single house
-        for(int i = 2;i<=n;i++){
-            int take = nums[i-1] + dp[i-2];
-            int nottake = dp[i-1];
+        if(n==1)    return nums[0];
+        if(n==2)    return max(nums[0],nums[1]);
 
-            dp[i] = max(take,nottake); 
+        int prevprev = 0;
+        int prev = nums[0];
+        for(int i = 1;i<n;i++){
+            int take = nums[i] + prevprev;
+            int skip = prev;
+
+            prevprev = prev;
+            prev = max(take,skip);
+
         }
 
-        return dp[n];
+        return prev;
     }
 };
