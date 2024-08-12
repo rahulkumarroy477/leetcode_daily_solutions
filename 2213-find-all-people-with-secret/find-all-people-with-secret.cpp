@@ -21,7 +21,7 @@ public:
         while(!q.empty()){
             auto it = q.top();
             q.pop();
-            if(hasKey[it.second])   continue;
+            // if(hasKey[it.second])   continue;
             hasKey[it.second] = true;
             for(auto node:adj[it.second]){
                 int p = node.first;
