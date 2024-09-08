@@ -9,39 +9,39 @@
  * };
  */
 class Solution {
+    int getListLength(ListNode* head){
+        if(head == nullptr) return 0;
+        return 1 + getListLength(head->next);
+    }
 public:
     vector<ListNode*> splitListToParts(ListNode* head, int k) {
-        ListNode* temp = head;
-        vector<ListNode*> ans(k, nullptr);
-        int n = 0; 
-        while(temp!=nullptr){
-            // cout<<temp->val<<" ";
-            n++;
-            temp = temp->next;
-        }
-        int partSize = n / k;
-        int extra = n % k;
-
-        ListNode* curr = head;
-        ListNode* prev = nullptr;
         
-        for (int i = 0; i < k; ++i) {
-            ans[i] = curr;
-            int currentPartSize = partSize + (i < extra ? 1 : 0);
-            
-            for (int j = 0; j < currentPartSize; ++j) {
-                prev = curr;
-                if (curr != nullptr) {
-                    curr = curr->next;
+        // get the length of linked list
+        int len = getListLength(head);
+
+        // divide the len in k parts
+        int n = len/k;
+        int rem_size = len%k;
+        vector<ListNode*> ans(k,nullptr);
+        ListNode* temp = head, *prev = nullptr;
+        for(int i = 0;i<k;i++){
+            ans[i] = temp;
+
+            int currPartSize = n + (rem_size > 0?1:0);
+            rem_size--;
+            for(int j = 0;j<currPartSize;j++){
+                prev = temp;
+                if(temp!=nullptr){
+                    temp = temp->next;
                 }
             }
             
-            if (prev != nullptr) {
+            if(prev != nullptr){
                 prev->next = nullptr;
             }
+
         }
-        
+
         return ans;
-        
     }
 };
