@@ -8,13 +8,18 @@ public:
         int m = s.size();
         int prev = 0;
         int content = 0;
-        for(int i = 0;i<n;i++){
-            int gf = g[i];
+        for (int i = 0; i < n; i++) {
+            int gf = g[i]; 
 
-            while(prev<m && s[prev]<gf)    prev++;
-            if(prev == m)   break;
-            content++;
-            prev++;
+            // Use binary search to find the smallest cookie >= gf
+            prev = lower_bound(s.begin() + prev, s.end(), gf) - s.begin();
+
+            if (prev < m) {
+                content++;
+                prev++;     
+            } else {
+                break;  // If no more cookies left to satisfy any child, stop
+            }
         }
 
         return content;
