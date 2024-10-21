@@ -12,26 +12,24 @@
 class Solution {
 public:
     vector<int> inorderTraversal(TreeNode* root) {
+        if(root == NULL)    return {};
         vector<int> ans;
-        if(root == nullptr){
-            return ans;
-        }
-        
+
         stack<TreeNode*> st;
-        
-        while(true){
-            if(root != nullptr){
-                st.push(root);
-                root = root->left;
+        TreeNode* curr = root;
+
+        while(curr || !st.empty()){
+            while(curr){
+                st.push(curr);
+                curr = curr->left;
             }
-            else{
-                if(st.empty())  break;
-                
-                ans.push_back(st.top()->val);
-                root = st.top()->right;
-                st.pop();
-            }
+
+            curr = st.top();
+            st.pop();
+            ans.push_back(curr->val);
+            curr = curr->right;
         }
+
         return ans;
     }
 };
