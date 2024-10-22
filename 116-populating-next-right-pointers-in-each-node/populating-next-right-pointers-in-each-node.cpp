@@ -27,21 +27,19 @@ public:
         q.push(root);
         while(!q.empty()){
             int size = q.size();
-            
-            Node* prev = nullptr, *curr = q.front();
-            q.pop();
-
-            if(curr->left)  q.push(curr->left);
-            if(curr->right) q.push(curr->right);
-            prev = curr;
-            for(int i = 1;i<size;i++){
-                curr = q.front();
+            Node* prev = NULL;
+            for(int i = 0;i<size;i++){
+                Node* curr = q.front();
                 q.pop();
-
-                if(curr->left)  q.push(curr->left);
-                if(curr->right) q.push(curr->right);
-                prev -> next = curr;
-                prev = curr;
+                
+                if(curr->left)	q.push(curr->left);
+                if(curr->right)	q.push(curr->right);
+                
+                if(i == 0)	prev = curr;
+                else{
+                    prev->next = curr;
+                    prev = curr;
+                }
             }
         }
 
