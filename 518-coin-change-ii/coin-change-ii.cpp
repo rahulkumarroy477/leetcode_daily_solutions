@@ -1,17 +1,20 @@
 class Solution {
 public:
-    int change(int amount, vector<int>& coins) {
-        
-        vector<int> dp(amount+1,0);
-        dp[0] = 1;
-        
-        int n = coins.size();
-        for(int i = 0;i<n;i++){
-            for(int j = coins[i];j<=amount;j++){
-                dp[j] += dp[j-coins[i]];
-            }
-        }
+    vector<vector<int>> dp;
+    int solve(int idx, int amount, vector<int> &coins){
+        if(idx == coins.size() || amount < 0) return 0;
 
-        return dp[amount];
+        if(amount == 0) return 1;
+
+        if(dp[idx][amount] != -1)   return dp[idx][amount];
+        int notPick = solve(idx+1, amount, coins);
+        int pick = solve(idx, amount-coins[idx], coins);
+
+        return dp[idx][amount] = pick + notPick;
+    }
+    int change(int amount, vector<int>& coins) {
+        int n = coins.size();
+        dp.resize(n,vector<int>(amount+1,-1));
+        return solve(0, amount, coins);
     }
 };
