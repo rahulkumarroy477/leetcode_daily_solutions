@@ -1,34 +1,30 @@
 class Solution {
 public:
+    int n;
+    int expandFromCen(string &s, int l, int r){
+        while(l>=0 and r<n and s[l] == s[r]){
+            l--;
+            r++;
+        }
+
+        return r-l-1;
+    }
     string longestPalindrome(string s) {
-        int n = s.length();
-        
-        vector<vector<bool>> pal(n,vector<bool>(n,false));
+        // expand from center approach
+        n = s.length();
+        int maxLen = 0;
+        int start = 0;
+        for(int i = 0;i<n;i++){
+            int len1 = expandFromCen(s,i,i); // odd length palindrome
+            int len2 = expandFromCen(s,i,i+1); // even length palindrome
 
-        int idx = 0, maxLen = 1;
-        for(int i = 0;i<n;i++)
-            pal[i][i] = true;
-        
-        for(int i = 0;i<n-1;i++){
-            if(s[i] == s[i+1]){
-                pal[i][i+1] = true;
-                idx = i, maxLen = 2;
+            int len = max(len1,len2);
+            if(len > maxLen){
+                maxLen = len;
+                start = i - (len - 1)/2;
             }
         }
 
-        for(int length = 3; length<=n;length++){
-            for(int i = 0;i<=n-length;i++){
-                int j = i + length - 1;
-                if(s[i] == s[j] && pal[i+1][j-1]){
-                    pal[i][j] = true;
-                    idx = i, maxLen = length;
-                }
-            }
-        }
-
-        return s.substr(idx,maxLen);
-
-
-        
+        return s.substr(start,maxLen);
     }
 };
