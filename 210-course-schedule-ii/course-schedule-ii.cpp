@@ -1,46 +1,50 @@
 class Solution {
 public:
-    vector<int> findOrder(int n, vector<vector<int>>& prerequisites) {
+
+    bool dfs(int node,vector<bool> &inPath,vector<bool> &vis, vector<int> &st, vector<int> adj[]){
+        vis[node] = true;
+        inPath[node] = true;
+        for(int child: adj[node]){
+            if(!vis[child]){
+                if(dfs(child,inPath,vis,st,adj) == true)   return true; 
+            }
+            else if(inPath[child])   return true;
+        }
+
+        st.push_back(node);
+        inPath[node] = false;
+        return false;
+    }
+
+    vector<int> topoSort(int n, vector<int> adj[]){
+        vector<int> st;
+        vector<bool> vis(n,false);
+        vector<bool> inPath(n,false);
+
+        for(int i = 0;i<n;i++){
+            if(!vis[i]){
+                if(dfs(i,inPath,vis,st,adj))
+                    return {};
+            }
+        }
+
+        reverse(st.begin(),st.end());
+        return st;
+
+    }
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
         // construct the graph
-        
-        vector<int> adj[n];
-        for(auto task:prerequisites){
-            int u = task[0];
-            int v = task[1];
+
+        vector<int> adj[numCourses];
+
+        for(auto p : prerequisites){
+            int u = p[0];
+            int v = p[1];
+
+            // v --> u
             adj[v].push_back(u);
         }
-        
-        
-        // calculate indegree of all nodes;
-        vector<int> indegree(n,0);
-        for(int i = 0;i<n;i++){
-            for(auto it:adj[i]){
-                indegree[it]++;
-            }
-        }
-        
-        queue<int> q;
-        
-        // insert all nodes with indegree 0
-        
-        for(int i =0;i<n;i++){
-            if(indegree[i]==0)  q.push(i);
-        }
-        
-        vector<int> topo;
-        while(!q.empty()){
-            int node = q.front();
-            q.pop();
-            
-            topo.push_back(node);
-            
-            for(auto adjNode:adj[node]){
-                indegree[adjNode]--;
-                if(indegree[adjNode]==0)    q.push(adjNode);
-            }
-        }
-        
-        if(topo.size()==n)  return topo;
-        return {};
+
+        return topoSort(numCourses,adj);
     }
 };
