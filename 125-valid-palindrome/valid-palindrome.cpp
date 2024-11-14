@@ -4,9 +4,7 @@ public:
         string str = "";
         for(char ch: s){
             if(isalnum(ch)){
-                if(ch>='A' and ch <= 'Z'){
-                    str.push_back('a' + ch-'A');
-                }else str.push_back(ch);
+                str.push_back(tolower(ch));
             }
         }
 
