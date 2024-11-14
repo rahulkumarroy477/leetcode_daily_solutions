@@ -1,21 +1,23 @@
 class Solution {
 public:
     bool isPalindrome(string s) {
-        string temp;
-        int n = s.length();
-        for(int i =0;i<n;i++){
-            char ch  = s[i];
-            if((ch>='a' and ch<='z') or (ch>='0' and ch<='9')){
-                temp.push_back(ch);
+        string str = "";
+        for(char ch: s){
+            if(isalnum(ch)){
+                if(ch>='A' and ch <= 'Z'){
+                    str.push_back('a' + ch-'A');
+                }else str.push_back(ch);
             }
-            else if(ch>='A' and ch<='Z'){
-                temp.push_back(ch + 'a' - 'A');
-            }
-             
         }
-        string rev = temp;
-        reverse(temp.begin(),temp.end());
-        if(rev == temp) return true;
-        return false;
+
+        cout<<str<<endl;
+
+        int n = str.length();
+        for(int i = 0;i<n/2;i++){
+            if(str[i] != str[n-i-1])
+                return false;
+        }
+
+        return true;
     }
 };
