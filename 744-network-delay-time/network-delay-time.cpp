@@ -1,39 +1,41 @@
 class Solution {
-
-
+typedef pair<int,int> P;
 public:
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-        // construct the graph
-        vector<pair<int,int>> adj[n+1];
-        for(auto it:times){
+        // construct graph
+        vector<P> adj[n+1];
+        for(auto it: times){
             int u = it[0];
             int v = it[1];
             int w = it[2];
             adj[u].push_back({v,w});
         }
 
-        // perform bfs
+        vector<int> dist(n+1,INT_MAX);
         
-        priority_queue<pair<int,int>,vector<pair<int,int>>, greater<pair<int,int>>> pq;
-        vector<int> time(n+1,INT_MAX);
-        time[k] = 0;
-        pq.push({0,k});
-        while(!pq.empty()){
-            auto [t,node] = pq.top();
-            pq.pop();
-            for(auto &child:adj[node]){
-                auto [childNode,T] = child;
-                if(t + T < time[childNode]){
-                    time[childNode] = t+T;
-                    pq.push({t+T,childNode});
+        priority_queue<P, vector<P>, greater<P>> minH;
+        dist[k] = 0;
+        minH.push({0,k});
+
+        while(!minH.empty()){
+            auto [cost, node] = minH.top();
+            minH.pop();
+
+            for(auto [child, wt] : adj[node]){
+                if(cost + wt < dist[child]){
+                    dist[child] = cost + wt;
+                    minH.push({dist[child],child});
                 }
             }
         }
-        int ans = INT_MIN;
-        for(int i = 1;i<=n;i++){
-            ans = max(ans,time[i]);
-        }
 
-        return ans==INT_MAX?-1:ans;
+        int ans = 0;
+        for(int i = 1;i<=n;i++){
+            if(dist[i] == INT_MAX)  return -1;
+
+            ans = max(ans, dist[i]);
+        }
+        return ans;
+        
     }
 };
