@@ -1,61 +1,45 @@
 class Solution {
-
-int dijkstra(vector<pair<int,int>> adj[],int n,int src, int distanceThreshold){
-    vector<int> dist(n,1e9);
-    dist[src] = 0;
-    set<pair<int,int>> st;
-    st.insert({0,src});
-
-    while(!st.empty()){
-        auto &it = *st.begin();
-        int wt = it.first;
-        int node = it.second;
-        st.erase(it);
-        for(auto &child:adj[node]){
-            int adjNode = child.first;
-            int W = child.second;
-
-            if(wt + W<dist[adjNode]){
-                if(dist[adjNode]!=1e9){
-                    st.erase({dist[adjNode],adjNode});
-                }
-                dist[adjNode] = wt + W;
-                st.insert({dist[adjNode],adjNode});
-            }
-        }
-    }
-    // get all nodes within threshold distance
-    int count = 0;
-    for(const int &x:dist){
-        if(x!=1e9 and x<=distanceThreshold)    count++;
-    }
-    return count;
-
-}
 public:
     int findTheCity(int n, vector<vector<int>>& edges, int distanceThreshold) {
+        // using floyd warshall
 
-        // adjacency list
-        vector<pair<int,int>> adj[n];
-        for(const auto &edge:edges){
+        vector<vector<int>> dist(n, vector<int>(n,INT_MAX));
+
+        for(auto edge: edges){
             int u = edge[0];
             int v = edge[1];
             int wt = edge[2];
 
-            adj[u].push_back({v,wt});
-            adj[v].push_back({u,wt});
+            dist[u][v] = wt;
+            dist[v][u] = wt;
         }
 
-        // no negative edge weights--> we can use dijkstra algorithm here
-        int idx = -1;
-        int ans = INT_MAX;
-        for(int i = 0;i<n;i++){
-            int d = dijkstra(adj,n,i,distanceThreshold);
-            if(d<=ans){
-                ans = d;
-                idx = i;
+        for(int i = 0;i<n;i++)  dist[i][i] = 0;
+
+        for(int k = 0; k<n; k++){
+            for(int i = 0;i<n;i++){
+                for(int j = 0;j<n;j++){
+                    if(dist[i][k] == INT_MAX || dist[k][j] == INT_MAX)
+                        continue;
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+                }
             }
         }
-        return idx;
+
+        int cntCity = n;
+        int cityNo = -1;
+        for(int i = 0;i<n;i++){
+            int cnt = 0;
+            for(int j = 0; j<n; j++){
+                if(dist[i][j] <= distanceThreshold)
+                    cnt++;
+            }
+
+            if(cnt <= cntCity){
+                cntCity = cnt;
+                cityNo = i;
+            }
+        }
+        return cityNo;
     }
 };
