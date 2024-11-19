@@ -1,43 +1,48 @@
 class Solution {
 public:
-    int m,n;
-    vector<vector<int>> directions{{1,0},{-1,0},{0,1},{0,-1}};
-    bool find(int i, int j, int curr,vector<vector<char>>& board, string &word){
-        // all words khatam
-        if(curr == word.length())   return true;
-        // boundary check
-        
-        if(i>=m || j>=n || i<0 || j<0 || board[i][j] == '$')
+
+    int m, n;
+    bool ok(int r, int c){
+        return (r>=0 && c>=0 && r<m && c<n);
+    }
+    vector<pair<int,int>> dir = {{-1,0},{0,1},{1,0},{0,-1}};
+    
+    bool solve(int r, int c, int idx, vector<vector<char>>& board, string &word){
+
+        if(idx == word.length())    return true;
+
+        if(!ok(r,c) || board[r][c] != word[idx])
             return false;
-        if(board[i][j] != word[curr])
-            return false;
-        
-        char ch = board[i][j];
-        board[i][j] = '$';
-        
-        for(auto &dir:directions){
-            int new_i = i + dir[0];
-            int new_j = j + dir[1];
-            if(find(new_i,new_j, curr+1,board,word)==true)  
+
+        char ch = board[r][c];
+        board[r][c] = '*';
+        // traverse in 4 directions
+        for(auto [dr, dc]: dir){
+            int nr = r + dr;
+            int nc = c + dc;
+            if(solve(nr, nc, idx+1, board, word))
                 return true;
             
         }
-        
-        board[i][j] = ch;
-        
-        // character nhi mila
+
+        board[r][c] = ch;
         return false;
     }
+
     bool exist(vector<vector<char>>& board, string word) {
-        
+        if (board.empty() || board[0].empty() || word.empty()) {
+            return false; // Handle edge cases
+        }
         m = board.size();
         n = board[0].size();
-        
-        for(int i = 0;i<m;i++){
-            for(int j = 0;j<n;j++){
-                if(board[i][j] == word[0] && find(i,j,0,board,word))  return true;
+
+        for(int i = 0; i<m; i++){
+            for(int j = 0; j<n; j++){
+                if(solve(i,j,0,board, word))
+                    return true;
             }
         }
+
         return false;
     }
 };
